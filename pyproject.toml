@@ -18,6 +18,8 @@ requires-python = ">=3.10"
 # project generic dependencies 项目通用依赖
 # ----------------------------------------------------------------
 dependencies = [
+    "pyyaml>=3.10",
+    "tqdm>=4.67.1"
 ]
 
 [tool.setuptools.packages.find]
