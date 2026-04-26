@@ -12,6 +12,7 @@ class LoggerManager:
             self,
             name: str = __name__,
             level=logging.INFO,
+            custom_handlers=None
     ) -> logging.Logger:
         if name in LoggerCenter:
             return LoggerCenter[name]
@@ -25,6 +26,11 @@ class LoggerManager:
             console_handler.setLevel(level)
             console_handler.setFormatter(ColoredFormatter(self._log_format, datefmt=self._date_format))
             logger.addHandler(console_handler)
+        if custom_handlers is not None:
+            if not isinstance(custom_handlers, list):
+                custom_handlers = [custom_handlers]
+            for custom_handler in custom_handlers:
+                logger.addHandler(custom_handler)
         LoggerCenter[name] = logger
         return logger
 
@@ -39,7 +45,8 @@ class LoggerLevel:
 
 def setup_logger(
         name: str = __name__,
-        default_level: str = LoggerLevel.INFO
+        default_level: str = LoggerLevel.INFO,
+        custom_handlers=None
 ) -> logging.Logger:
     log_level_map = {
         "debug": logging.DEBUG,
@@ -48,4 +55,4 @@ def setup_logger(
         "error": logging.ERROR,
         "critical": logging.CRITICAL
     }
-    return LoggerManager().get_logger(name, log_level_map[default_level])
+    return LoggerManager().get_logger(name, log_level_map[default_level], custom_handlers=custom_handlers)
